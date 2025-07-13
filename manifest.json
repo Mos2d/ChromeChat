@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "AI Chatbot Assistant",
+  "version": "1.0",
+  "description": "A chatbot extension that automates browser tasks",
+  "permissions": ["tabs", "scripting"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
