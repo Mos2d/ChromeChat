@@ -1,45 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
   const commandInput = document.getElementById('command');
   const sendButton = document.getElementById('send');
+  const responseDiv = document.getElementById('response');
 
-  // Auto-focus on input when popup opens
   commandInput.focus();
 
-  // Listen for the Send button click
   sendButton.addEventListener('click', () => {
     const userCommand = commandInput.value.trim();
-    console.log(userCommand);
 
-    // Send the user input to the Python server (Flask backend)
-    fetch('http://localhost:5000/process', {
+    fetch('http://localhost:5005/model/parse', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: userCommand })
     })
     .then(response => response.json())
     .then(data => {
-      if (data.command) {
-        const command = data.command;
-        console.log('Processed command:', command);
+      console.log('Rasa response:', data);
+
+      const intent = data.intent ? data.intent.name : null;
+      const confidence = data.intent ? data.intent.confidence : 0;
+      const originalText = data.text;
+
+      if (intent === 'search_youtube' && confidence > 0.7) {
+        const command = `search ${originalText} on youtube`;
         chrome.runtime.sendMessage({ action: 'processCommand', command: command });
-        document.getElementById('response').innerText = "Processing...";
-        commandInput.value = '';
+        responseDiv.innerText = `Processing: ${originalText}`;
       } else {
-        console.error('Backend error:', data.error);
-        document.getElementById('response').innerText = "Error: " + (data.error || 'Unknown error');
+        responseDiv.innerText = "Sorry, I didn't understand that.";
       }
+
+      commandInput.value = '';
     })
     .catch(error => {
       console.error('Error:', error);
-      document.getElementById('response').innerText = "Something went wrong.";
+      responseDiv.innerText = "Something went wrong.";
     });
   });
 
-  // Allow pressing Enter to submit the command (no new lines)
   commandInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();  // Prevent adding a new line
-      sendButton.click();  // Trigger the Send button click
+      event.preventDefault();
+      sendButton.click();
     }
   });
 });
