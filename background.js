@@ -25,11 +25,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       });
     }
-    // else if (command.includes('gmail')) {
-    //   chrome.tabs.create({ url: 'https://mail.google.com' });
-    // } else {
-    //   console.log('Unknown command:', command);
-    // }
+    else if (command.includes('gmail')) {
+      chrome.tabs.create({ url: 'https://mail.google.com' });
+    } else {
+      console.log('Unknown command:', command);
+    }
   }
 });
 

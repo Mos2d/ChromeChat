@@ -1,0 +1,8 @@
+venv/
+venvScriptsactivate/
+.rasa/
+actions/
+data/
+models/
+tests/
+*.yml
