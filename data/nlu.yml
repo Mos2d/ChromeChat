@@ -92,10 +92,13 @@ nlu:
 
 - intent: search_youtube
   examples: |
-    - find lo-fi beats
-    - play some jazz music
-    - show me cooking tutorials
-    - search funny cat videos
-    - play rock music
-    - I want to watch comedy shows
-    - show me how to bake a cake
+    - please search [lo-fi beats](search_query) on youtube
+    - find [jazz music](search_query) videos on youtube
+    - show me [cooking tutorials](search_query) on youtube
+    - play [rock songs](search_query) on youtube
+    - I want to watch [comedy shows](search_query) on youtube
+    - search for [hip hop tracks](search_query) on youtube
+    - look up [tech reviews](search_query) on youtube
+    - search youtube for [gaming highlights](search_query)
+    - find me youtube videos about [travel vlogs](search_query)
+    - can you search [meditation music](search_query) on youtube for me

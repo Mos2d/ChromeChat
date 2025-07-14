@@ -19,12 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const intent = data.intent ? data.intent.name : null;
       const confidence = data.intent ? data.intent.confidence : 0;
-      const originalText = data.text;
 
-      if (intent === 'search_youtube' && confidence > 0.7) {
-        const command = `search ${originalText} on youtube`;
+      // Find search_query entity if present
+      const queryEntity = data.entities.find(e => e.entity === 'search_query');
+      const query = queryEntity ? queryEntity.value : null;
+
+      if (intent === 'search_youtube' && confidence > 0.7 && query) {
+        const command = `search ${query} on youtube`;
         chrome.runtime.sendMessage({ action: 'processCommand', command: command });
-        responseDiv.innerText = `Processing: ${originalText}`;
+        responseDiv.innerText = `Processing: ${query}`;
+      } else if (intent === 'search_youtube' && confidence > 0.7) {
+        // fallback: no entity found, use full text
+        const command = `search ${data.text} on youtube`;
+        chrome.runtime.sendMessage({ action: 'processCommand', command: command });
+        responseDiv.innerText = `Processing: ${data.text}`;
       } else {
         responseDiv.innerText = "Sorry, I didn't understand that.";
       }
@@ -37,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Allow Enter key to submit (no newline)
   commandInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
