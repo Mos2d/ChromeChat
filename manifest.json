@@ -1,32 +1,28 @@
 {
   "manifest_version": 3,
   "name": "ChromeChat",
-  "version": "1.0",
-  "description": "An AI chatbot Chrome extension using Rasa backend",
+  "version": "1.3",
+  "description": "AI chatbot with floating widget, random nature background, and Quran verse on new tab",
   "permissions": [
     "tabs",
     "scripting"
   ],
   "host_permissions": [
-    "http://localhost:5005/*"
+    "https://api.alquran.cloud/*",
+    "https://picsum.photos/*"
   ],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
-  },
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
