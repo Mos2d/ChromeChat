@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI New Tab</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      position: relative;
+      font-family: sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    #bg {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.3);
+      z-index: 0;
+    }
+    #verse {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 80%;
+      text-align: center;
+      z-index: 1;
+    }
+    .arabic-text {
+        font-size: 3em;       /* adjust Arabic size */
+        direction: rtl;       /* right-to-left */
+        margin-bottom: 30px;  /* space below */
+    }
+
+    .english-text {
+        font-size: 2em;
+        line-height: 2em;
+    }
+
+  </style>
+</head>
+<body>
+  <img id="bg" src="" alt="background">
+  <div id="verse">Loading verse…</div>
+
+  <!-- External script -->
+  <script src="newtab.js"></script>
+  <script src="content.js"></script> <!-- Keep floating widget -->
+</body>
+</html>
