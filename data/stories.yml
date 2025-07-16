@@ -28,3 +28,10 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+
+- story: search youtube videos
+  steps:
+    - intent: search_youtube
+    - action: utter_search_result
+

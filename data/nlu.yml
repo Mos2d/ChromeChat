@@ -1,5 +1,4 @@
 version: "3.1"
-
 nlu:
 - intent: greet
   examples: |
@@ -16,7 +15,6 @@ nlu:
     - goodmorning
     - goodevening
     - good afternoon
-
 - intent: goodbye
   examples: |
     - cu
@@ -29,7 +27,6 @@ nlu:
     - see you around
     - bye bye
     - see you later
-
 - intent: affirm
   examples: |
     - yes
@@ -38,7 +35,6 @@ nlu:
     - of course
     - that sounds good
     - correct
-
 - intent: deny
   examples: |
     - no
@@ -48,7 +44,6 @@ nlu:
     - don't like that
     - no way
     - not really
-
 - intent: mood_great
   examples: |
     - perfect
@@ -65,7 +60,6 @@ nlu:
     - so so perfect
     - so good
     - so perfect
-
 - intent: mood_unhappy
   examples: |
     - my day was horrible
@@ -82,14 +76,12 @@ nlu:
     - extremly sad
     - so saad
     - so sad
-
 - intent: bot_challenge
   examples: |
     - are you a bot?
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
-
 - intent: search_youtube
   examples: |
     - please search [lo-fi beats](search_query) on youtube
@@ -102,3 +94,14 @@ nlu:
     - search youtube for [gaming highlights](search_query)
     - find me youtube videos about [travel vlogs](search_query)
     - can you search [meditation music](search_query) on youtube for me
+    - find [relaxing music](search_query) for sleep
+    - show me [tutorials](search_query) for beginners
+    - can you find me some [DIY crafts](search_query) videos?
+    - search [funny animal videos](search_query) for kids
+    - I need something like [meditation music](search_query) on youtube
+    - can you play [classical music](search_query) from youtube?
+    - search [baking tutorials](search_query) on youtube for beginners
+    - find me the latest [music](search_query) videos on youtube
+    - search [king bob](search_query) on youtube
+    - search [valorant](search_query) videos on youtube
+    - can you search up [crazy cat videos](search_query) on youtube please?

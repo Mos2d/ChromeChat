@@ -25,3 +25,15 @@
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
+from rasa_sdk import Action
+from rasa_sdk.events import SlotSet
+
+class UtterSearchResult(Action):
+    def name(self) -> str:
+        return "utter_search_result"
+
+    def run(self, dispatcher, tracker, domain):
+        query = tracker.get_slot("search_query")
+        # Call YouTube API or your logic to search based on the query
+        dispatcher.utter_message(f"Searching YouTube for: {query}")
+        return [SlotSet("search_query", query)]
