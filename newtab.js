@@ -43,7 +43,7 @@ fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/editions/ar.quran-simple,
 
   particlesJS('particles-layer1', {
   particles: {
-    number: { value: 10 },
+    number: { value: 5 },
     size: { value: 1.5 },
     color: { value: '#ffffff' },
     opacity: { value: 0.5 },
