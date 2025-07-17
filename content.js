@@ -43,6 +43,7 @@ widgetButton.addEventListener('click', () => {
     // Show the chatbox with slide-in animation
     chatBox.style.display = 'block';
     chatBox.style.animation = 'slideFromButton 0.3s ease-out forwards';
+    document.getElementById("chat-widget-input").focus();
   } else {
     // Hide the chatbox with slide-out animation
     chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
