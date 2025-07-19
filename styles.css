@@ -1,17 +1,9 @@
 /* Global reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+#chat-widget-container * { margin: 0; padding: 0; box-sizing: border-box;}
+
 
 /* Body styling */
-body, html {
-  height: 100%;
-  font-family: sans-serif;
-  color: #fff;
-  overflow: hidden;
-}
+#chat-widget-container { font-family: sans-serif; height: 100%; color: #fff; overflow: hidden;}
 
 /* Background image and particles */
 #bg {
@@ -37,6 +29,7 @@ body, html {
 
 /* Main verse container (centered) */
 #verse {
+  color: #ffffff;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -68,6 +61,7 @@ body, html {
   width: 30rem;
   background: #FFFFFF; /* White cloud-like background */
   border-radius: 25px;  /* Rounded for cloud effect */
+  border: 2px solid #6C63FF;
   padding: 20px;
   z-index: 10000;
   display: none;

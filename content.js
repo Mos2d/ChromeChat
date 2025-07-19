@@ -16,10 +16,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // Create floating button
+const widgetContainer = document.createElement('div');
+widgetContainer.id = 'chat-widget-container';
+document.body.appendChild(widgetContainer);
 const widgetButton = document.createElement('div');
 widgetButton.id = 'chat-widget-button';
 widgetButton.innerText = '💬';
-document.body.appendChild(widgetButton);
+widgetContainer.appendChild(widgetButton);
 
 // Create chat box (hidden by default)
 const chatBox = document.createElement('div');
@@ -34,8 +37,11 @@ chatBox.innerHTML = `
 `;
 document.body.appendChild(chatBox);
 
-// Initially set the chatbox to 'none'
-chatBox.style.display = 'none';
+// Initially set the chatbox to 'block'
+window.addEventListener('load', () => {
+  chatBox.style.display = 'block';
+  const input = document.getElementById("chat-widget-input");
+});
 
 // Toggle chat box on button click
 widgetButton.addEventListener('click', () => {
@@ -99,4 +105,8 @@ document.getElementById('chat-widget-input').addEventListener('keydown', (event)
     event.preventDefault();
     document.getElementById('chat-widget-send').click();
   }
+});
+
+input.addEventListener('focus', () => {
+  input.select();
 });
