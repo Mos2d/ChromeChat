@@ -1,57 +1,54 @@
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   if (request.action === 'processCommand') {
-//     const command = request.command.toLowerCase();
-//     if (command.includes('youtube')) {
-//       const queryMatch = command.match(/search (.+) on youtube/);
-//       const query = queryMatch ? queryMatch[1] : '';
-
-//       chrome.tabs.create({ url: 'https://www.youtube.com' }, (tab) => {
-//         chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-//           if (tabId === tab.id && info.status === 'complete') {
-//             chrome.tabs.onUpdated.removeListener(listener);
-
-//             chrome.scripting.executeScript({
-//               target: { tabId: tab.id },
-//               files: ['content.js']
-//             }, () => {
-//               if (query) {
-//                 chrome.tabs.sendMessage(tab.id, {
-//                   action: 'youtubeSearch',
-//                   query: query
-//                 });
-//               }
-//             });
-//           }
-//         });
-//       });
-//     }
-//     else if (command.includes('gmail')) {
-//       chrome.tabs.create({ url: 'https://mail.google.com' });
-//     } else {
-//       console.log('Unknown command:', command);
-//     }
-//   }
-// });
- 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'parseCommand') {
+    // Handle intent parsing in background (avoid CORS issues)
+    fetch('http://localhost:5005/model/parse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: request.text })
+    })
+      .then(response => response.json())
+      .then(data => {
+        sendResponse({ success: true, data });
+      })
+      .catch(error => {
+        console.error('Background fetch error:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // IMPORTANT: Keep the message channel open for async sendResponse
+  }
+
   if (request.action === 'processCommand') {
     const command = request.command.toLowerCase();
-    if (command.includes('youtube')) {
-      const queryMatch = command.match(/search (.+) on youtube/);
-      const query = queryMatch ? queryMatch[1] : '';
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
 
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
+      if (command.includes('youtube')) {
+        const queryMatch = command.match(/search (.+) on youtube/);
+        const query = queryMatch ? queryMatch[1] : '';
         const youtubeSearchURL = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 
-        // Update the current active tab to search on YouTube
-        chrome.tabs.update(tab.id, { url: youtubeSearchURL });
-      });
-    }
-    else if (command.includes('gmail')) {
-      chrome.tabs.create({ url: 'https://mail.google.com' });
-    } else {
-      console.log('Unknown command:', command);
-    }
+        chrome.tabs.update(tab.id, { url: youtubeSearchURL }, () => {
+          chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['content.js']
+          });
+        });
+      }
+      else if (command.includes('google')) {
+        const queryMatch = command.match(/search (.+) on google/);
+        const query = queryMatch ? queryMatch[1] : '';
+        const googleSearchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+
+        chrome.tabs.update(tab.id, { url: googleSearchURL }, () => {
+          chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['content.js']
+          });
+        });
+      }
+      else {
+        console.log('Unknown command:', command);
+      }
+    });
   }
 });

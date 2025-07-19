@@ -114,3 +114,52 @@ nlu:
     - search [emma watson interview](search_query) on youtube
     - search [car reviews](search_query) on youtube
     - search [dog tricks](search_query) on youtube
+- intent: search_google
+  examples: |
+    - search [AI trends](search_query) on google
+    - search [python tutorials](search_query) on google
+    - search [best pizza near me](search_query) on google
+    - search [weather tomorrow](search_query) on google
+    - search [top movies 2025](search_query) on google
+    - search [ChatGPT release date](search_query) on google
+    - search [programming jobs](search_query) on google
+    - search [how to bake a cake](search_query) on google
+    - search [JavaScript array methods](search_query) on google
+    - search [current news](search_query) on google
+    - google search [latest technology updates](search_query)
+    - google search [best smartphones 2025](search_query)
+    - google search [OpenAI projects](search_query)
+    - google search [online courses for data science](search_query)
+    - look up [stock market trends](search_query) on google
+    - look up [summer fashion trends](search_query) on google
+    - look up [best gaming laptops](search_query) on google
+    - find [travel deals](search_query) on google
+    - find [nearby coffee shops](search_query) on google
+    - find [cheap flights to Paris](search_query) on google
+    - get [directions to Central Park](search_query) on google
+    - get [recipe for lasagna](search_query) on google
+    - get [meaning of life](search_query) on google
+    - show me [cat pictures](search_query) on google
+    - show me [memes](search_query) on google
+    - search [medical advice](search_query) on google
+    - search [mental health tips](search_query) on google
+    - search [how to meditate](search_query) on google
+    - search [meaning of resilience](search_query) on google
+    - search for [top rated books](search_query) on google
+    - search for [productivity apps](search_query) on google
+    - search for [COVID-19 updates](search_query) on google
+    - search for [math tutorials](search_query) on google
+    - search for [programming memes](search_query) on google
+    - look up [python vs javascript](search_query) on google
+    - look up [funny jokes](search_query) on google
+    - google search [what is quantum computing](search_query)
+    - google search [best practices for SEO](search_query)
+    - google search [cheap hotels in New York](search_query)
+    - google search [weather forecast for Tokyo](search_query)
+    - google search [how to learn guitar](search_query)
+    - google search [benefits of exercise](search_query)
+    - google search [climate change facts](search_query)
+    - google search [next space launch](search_query)
+    - google search [artificial intelligence news](search_query)
+    - google search [sports scores today](search_query)
+    - google search [local events this weekend](search_query)

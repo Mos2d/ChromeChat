@@ -67,36 +67,37 @@ document.getElementById('chat-widget-send').addEventListener('click', () => {
 
   if (!userCommand) return;
 
-  fetch('http://localhost:5005/model/parse', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: userCommand })
-  })
-  .then(response => response.json())
-  .then(data => {
-    const intent = data.intent ? data.intent.name : null;
-    const confidence = data.intent ? data.intent.confidence : 0;
-    const queryEntity = data.entities.find(e => e.entity === 'search_query');
-    const query = queryEntity ? queryEntity.value : null;
+  // Send command to background to handle fetch
+  chrome.runtime.sendMessage(
+    { action: 'parseCommand', text: userCommand },
+    (response) => {
+      if (!response || !response.success) {
+        console.error('Error:', response ? response.error : 'No response');
+        responseDiv.innerText = "Something went wrong.";
+        return;
+      }
 
-    if (intent === 'search_youtube' && confidence > 0.7 && query) {
-      const command = `search ${query} on youtube`;
-      chrome.runtime.sendMessage({ action: 'processCommand', command });
-      responseDiv.innerText = `Processing: ${query}`;
-    } else if (intent === 'search_youtube' && confidence > 0.7) {
-      const command = `search ${data.text} on youtube`;
-      chrome.runtime.sendMessage({ action: 'processCommand', command });
-      responseDiv.innerText = `Processing: ${data.text}`;
-    } else {
-      responseDiv.innerText = "Sorry, I didn't understand that.";
+      const data = response.data;
+      const intent = data.intent ? data.intent.name : null;
+      const confidence = data.intent ? data.intent.confidence : 0;
+      const queryEntity = data.entities.find(e => e.entity === 'search_query');
+      const query = queryEntity ? queryEntity.value : null;
+
+      if (intent === 'search_youtube' && confidence > 0.7 && query) {
+        const command = `search ${query} on youtube`;
+        chrome.runtime.sendMessage({ action: 'processCommand', command });
+        responseDiv.innerText = `Searching YouTube for: ${query}`;
+      } else if (intent === 'search_google' && confidence > 0.7 && query) {
+        const command = `search ${query} on google`;
+        chrome.runtime.sendMessage({ action: 'processCommand', command });
+        responseDiv.innerText = `Searching Google for: ${query}`;
+      } else {
+        responseDiv.innerText = "Sorry, I didn't understand that.";
+      }
+
+      input.value = '';
     }
-
-    input.value = '';
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    responseDiv.innerText = "Something went wrong.";
-  });
+  );
 });
 
 // Allow Enter key to submit
@@ -105,8 +106,4 @@ document.getElementById('chat-widget-input').addEventListener('keydown', (event)
     event.preventDefault();
     document.getElementById('chat-widget-send').click();
   }
-});
-
-input.addEventListener('focus', () => {
-  input.select();
 });
