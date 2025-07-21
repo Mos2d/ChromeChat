@@ -1,9 +1,24 @@
+body.newtab-page, html.newtab-page {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 /* Global reset */
 #chat-widget-container * { margin: 0; padding: 0; box-sizing: border-box;}
 
 
 /* Body styling */
-#chat-widget-container { font-family: sans-serif; height: 100%; color: #fff; overflow: hidden;}
+#chat-widget-container {
+  position: fixed;  /* << new */
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;  /* << new */
+  z-index: 10000;     /* keep it on top */
+}
 
 /* Background image and particles */
 #bg {
@@ -42,6 +57,7 @@
 }
 
 .arabic-text {
+  font-family: 'Amiri', serif;
   font-size: 3em;
   direction: rtl;
   margin-bottom: 30px;
@@ -49,6 +65,7 @@
 }
 
 .english-text {
+  font-family: 'Merriweather', serif;
   font-size: 2em;
   line-height: 2em;
 }
@@ -58,7 +75,7 @@
   position: fixed;
   bottom: 150px;
   right: 60px;
-  width: 30rem;
+  width: 480px;
   background: #FFFFFF; /* White cloud-like background */
   border-radius: 25px;  /* Rounded for cloud effect */
   border: 2px solid #6C63FF;
@@ -110,7 +127,7 @@
 /* Styling for the chatbot header */
 #chat-widget-box div {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 22px;
   margin-bottom: 15px;
   color: #6C63FF;  /* Soft lavender color */
   text-align: center;
@@ -133,6 +150,16 @@
   z-index: 9999;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   font-size: 30px;
+  transition: all 0.2s ease-in-out;
+}
+
+#chat-widget-button:hover {
+  bottom: 18px;
+  right: 18px;
+  width: 65px;
+  height: 65px;
+  font-size: 35px;
+  transition: all 0.2s ease-in-out;
 }
 
 #chat-widget-input {
@@ -140,11 +167,16 @@
   padding: 12px;
   border: 2px solid #6C63FF;
   border-radius: 20px;
-  font-size: 1em;
+  font-size: 15px;
   margin-bottom: 10px;
   background-color: #f5f5f5;
   transition: all 0.3s ease;
   box-sizing: border-box;
+}
+
+#chat-widget-input::placeholder {
+  color: #888888; /* soft lavender from your theme */
+  opacity: 1;
 }
 
 #chat-widget-input:focus {
@@ -159,7 +191,7 @@
   color: white;
   border: none;
   border-radius: 20px;
-  font-size: 1.1em;
+  font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -170,7 +202,7 @@
 
 #chat-widget-response {
   margin-top: 10px;
-  font-size: 1em;
+  font-size: 15px;
   color: #333;
   text-align: center;
 }

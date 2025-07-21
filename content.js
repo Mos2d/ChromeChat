@@ -91,6 +91,15 @@ document.getElementById('chat-widget-send').addEventListener('click', () => {
         const command = `search ${query} on google`;
         chrome.runtime.sendMessage({ action: 'processCommand', command });
         responseDiv.innerText = `Searching Google for: ${query}`;
+      } else if (intent === 'navigate_back') {
+        chrome.runtime.sendMessage({ action: 'processCommand', command: 'go back' });
+        responseDiv.innerText = `Going back...`;
+      } else if (intent === 'navigate_forward') {
+        chrome.runtime.sendMessage({ action: 'processCommand', command: 'go forward' });
+        responseDiv.innerText = `Going forward...`;
+      } else if (intent === 'refresh_page') {
+        chrome.runtime.sendMessage({ action: 'processCommand', command: 'refresh page' });
+        responseDiv.innerText = `Refreshing page...`;
       } else {
         responseDiv.innerText = "Sorry, I didn't understand that.";
       }

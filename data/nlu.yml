@@ -82,6 +82,7 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+    
 - intent: search_youtube
   examples: |
     - please search [lo-fi beats](search_query) on youtube
@@ -114,6 +115,7 @@ nlu:
     - search [emma watson interview](search_query) on youtube
     - search [car reviews](search_query) on youtube
     - search [dog tricks](search_query) on youtube
+
 - intent: search_google
   examples: |
     - search [AI trends](search_query) on google
@@ -163,3 +165,49 @@ nlu:
     - google search [artificial intelligence news](search_query)
     - google search [sports scores today](search_query)
     - google search [local events this weekend](search_query)
+
+- intent: navigate_back
+  examples: |
+    - go back
+    - back please
+    - can you go back
+    - go to previous page
+    - navigate back
+    - take me back
+    - go to the last page
+    - back one step
+    - return to the last page
+    - go back in this tab
+    - move back in the tab
+    - back in the tab
+
+- intent: navigate_forward
+  examples: |
+    - go forward
+    - forward
+    - next page
+    - forward please
+    - can you go forward
+    - navigate forward
+    - go to next page
+    - forward one step
+    - proceed forward
+    - move ahead
+    - go forward in this tab
+    - forward in the tab
+    - move ahead in the tab
+
+- intent: refresh_page
+  examples: |
+    - refresh page
+    - reload the page
+    - refresh please
+    - can you refresh
+    - reload
+    - reload this page
+    - update the page
+    - refresh it
+    - reload please
+    - refresh this tab
+    - reload the tab
+    - update this tab

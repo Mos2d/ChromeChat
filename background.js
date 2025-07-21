@@ -28,27 +28,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const youtubeSearchURL = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 
         chrome.tabs.update(tab.id, { url: youtubeSearchURL }, () => {
-          chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['content.js']
-          });
+          chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
         });
-      }
-      else if (command.includes('google')) {
+
+      } else if (command.includes('google')) {
         const queryMatch = command.match(/search (.+) on google/);
         const query = queryMatch ? queryMatch[1] : '';
         const googleSearchURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 
         chrome.tabs.update(tab.id, { url: googleSearchURL }, () => {
-          chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['content.js']
-          });
+          chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
         });
-      }
-      else {
+
+      } else if (command === 'go back') {
+        chrome.tabs.goBack(tab.id);
+      } else if (command === 'go forward') {
+        chrome.tabs.goForward(tab.id);
+      } else if (command === 'refresh page') {
+        chrome.tabs.reload(tab.id);
+      } else {
         console.log('Unknown command:', command);
       }
     });
   }
+
 });

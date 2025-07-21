@@ -9,6 +9,9 @@ intents:
 - mood_unhappy
 - search_youtube
 - search_google
+- navigate_back
+- navigate_forward
+- refresh_page
 responses:
   utter_greet:
   - text: Hey! How are you?

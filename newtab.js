@@ -23,7 +23,7 @@ fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/editions/ar.quran-simple,
 
       verseEl.innerHTML = `
         <div class="arabic-text">
-            ${arabic.text}
+            ۝ ${arabic.text} ۝ 
         </div>
         <div class="english-text">
             <b>Surah ${english.surah.number} (${english.surah.englishName}) Ayah ${english.numberInSurah}</b><br>
