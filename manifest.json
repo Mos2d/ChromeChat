@@ -5,11 +5,14 @@
   "description": "AI chatbot with floating widget, random nature background, and Quran verse on new tab",
   "permissions": [
     "tabs",
-    "scripting"
+    "scripting",
+    "notifications",
+    "storage"
   ],
   "host_permissions": [
     "https://api.alquran.cloud/*",
-    "https://picsum.photos/*"
+    "https://picsum.photos/*",
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
