@@ -150,7 +150,7 @@ body.newtab-page, html.newtab-page {
   z-index: 9999;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   font-size: 30px;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
 
 #chat-widget-button:hover {
@@ -159,7 +159,7 @@ body.newtab-page, html.newtab-page {
   width: 65px;
   height: 65px;
   font-size: 35px;
-  transition: all 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
 
 #chat-widget-input {

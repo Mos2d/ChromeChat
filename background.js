@@ -55,11 +55,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 const hardcodedTimings = {
-    Fajr: "06:15",
-    Dhuhr: "06:16",
-    Asr: "06:17",
-    Maghrib: "06:18",
-    Isha: "06:19"
+    Fajr: "18:03",
+    Dhuhr: "18:04",
+    Asr: "18:05",
+    Maghrib: "18:06",
+    Isha: "18:07"
 };
 
 const fetchPrayerTimes = () => {
@@ -93,25 +93,23 @@ const scheduleAthanNotifications = (timings) => {
 
         // If the prayer time has already passed, skip it
         if (prayerDate.getTime() <= currentTime.getTime()) {
-            return;  // Skip this prayer since it's already passed
+            return;
         }
 
         // Calculate the time difference
         const timeDifference = prayerDate.getTime() - currentTime.getTime();
         
-        if (timeDifference > 0) {
-            chrome.notifications.create({
-                type: 'basic',
-                iconUrl: 'icon16.png',  // Make sure your icon path is correct
-                title: `We are waiting for ${prayer}`,
-                message: `It'll take ${timeDifference/1000} seconds`,
-                priority: 2
-            });
-            setTimeout(() => {
-                playAthan();
-                showPrayerNotification(prayer);
-            }, timeDifference);
-        }
+        // chrome.notifications.create({
+        //     type: 'basic',
+        //     iconUrl: 'icon16.png',  // Make sure your icon path is correct
+        //     title: `We are waiting for ${prayer}`,
+        //     message: `It'll take ${timeDifference/1000} seconds`,
+        //     priority: 2
+        // });
+        setTimeout(() => {
+            // playAthan();
+            showPrayerNotification(prayer);
+        }, timeDifference);
     });
 };
 
@@ -124,7 +122,7 @@ const playAthan = () => {
         chrome.scripting.executeScript({
             target: { tabId: activeTab.id },
             func: () => {
-                const athanAudio = new Audio(chrome.runtime.getURL('https://jmp.sh/s/m4QmoOjgv2gxEf3AHnsI')); // Adjust path if needed
+                const athanAudio = new Audio(chrome.runtime.getURL('athan.mp3')); // Adjust path if needed
                 athanAudio.play().catch(err => console.error("Failed to play athan audio:", err));
             }
         });
