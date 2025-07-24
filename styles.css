@@ -73,9 +73,8 @@ body.newtab-page, html.newtab-page {
 /* Cloud container with shadow effect */
 #chat-widget-box {
   position: fixed;
-  bottom: 150px;
-  right: 60px;
   width: 480px;
+  height: 200px;
   background: #FFFFFF; /* White cloud-like background */
   border-radius: 25px;  /* Rounded for cloud effect */
   border: 2px solid #6C63FF;
@@ -84,18 +83,17 @@ body.newtab-page, html.newtab-page {
   display: none;
   box-sizing: border-box;
   animation: floatCloud 5s ease-in-out infinite, slideFromButton 0.3s ease-out forwards;
-  transform-origin: bottom right;
 }
 
 /* Slide animation from the button */
 @keyframes slideFromButton {
   0% {
     opacity: 0;
-    transform: scale(0) translateY(50px); /* Start small and below the button */
+    transform: scale(0); /* Start small and below the button */
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0); /* End up at normal size and position */
+    transform: scale(1); /* End up at normal size and position */
   }
 }
 
@@ -103,11 +101,11 @@ body.newtab-page, html.newtab-page {
 @keyframes slideToButton {
   0% {
     opacity: 1;
-    transform: scale(1) translateY(0); /* Start from normal size */
+    transform: scale(1); /* Start from normal size */
   }
   100% {
     opacity: 0;
-    transform: scale(0) translateY(50px); /* Shrink and move down */
+    transform: scale(0); /* Shrink and move down */
   }
 }
 
