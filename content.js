@@ -184,6 +184,14 @@ document.addEventListener('mouseup', event => {
     // Set the final position for the button
     widgetButton.style.left = `${closestX}px`;
     widgetButton.style.top = `${Math.min(Math.max(currentY, padding), window.innerHeight - widgetButton.offsetHeight - padding)}px`;
+
+    // Check if the button is on the left or right edge
+    if (buttonRect.left <= padding || buttonRect.left + widgetButton.offsetWidth >= window.innerWidth - padding) {
+      moveChatboxToNewPosition();
+    }
+
+    // Wait for the button to finish its transition
+    widgetButton.addEventListener('transitionend', moveChatboxToNewPosition, { once: true });
   } else {
     const isClickInsideChatBox = chatBox.contains(event.target);
     const isClickOnButton = widgetButton.contains(event.target);
@@ -196,8 +204,8 @@ document.addEventListener('mouseup', event => {
       }, 400);
     }
     
-    // When clicking on the chat button (not dragging)
-    if(isClickOnButton) {
+    // Handle button click to toggle chatbox visibility
+    if (isClickOnButton) {
       if (chatBox.style.display === 'none') {
         // Get the position of the button
         const buttonRect = widgetButton.getBoundingClientRect();
@@ -211,38 +219,29 @@ document.addEventListener('mouseup', event => {
 
         let chatboxLeft, chatboxTop;
 
-        // Check if the button is on the right or left side
         if (buttonRect.left + buttonRect.width / 2 > window.innerWidth / 2) {
-          // Button is on the right side, fix chatbox on the left
-          chatboxLeft = buttonRect.left - chatboxWidth - 10; // Position to the left of the button
+          chatboxLeft = buttonRect.left - chatboxWidth - 15; // Position to the left of the button
         } else {
-          // Button is on the left side, fix chatbox on the right
-          chatboxLeft = buttonRect.left + buttonRect.width + 10; // Position to the right of the button
+          chatboxLeft = buttonRect.left + buttonRect.width + 15; // Position to the right of the button
         }
 
-        // Default top position: place chatbox next to the button
-        chatboxTop = buttonRect.top + buttonHeight/2 - chatboxHeight/2;
+        chatboxTop = buttonRect.top + buttonHeight / 2 - chatboxHeight / 2;
 
-        // Ensure the chatbox stays within the vertical bounds
         if (chatboxTop + chatboxHeight > window.innerHeight) {
-          // If it overflows, place it above the button
-          chatboxTop = buttonRect.top - chatboxHeight/2 - 10;
+          chatboxTop = buttonRect.top - chatboxHeight / 2 - 10;
         }
 
-        // Apply the calculated position to the chatbox
         chatBox.style.left = `${Math.min(Math.max(chatboxLeft, 0), window.innerWidth - chatboxWidth)}px`;
         chatBox.style.top = `${Math.min(Math.max(chatboxTop, 30), window.innerHeight - chatboxHeight - 30)}px`;
 
-        // Show the chatbox with animation
         chatBox.style.display = 'block';
         chatBox.style.animation = 'slideFromButton 0.3s ease-out forwards';
         document.getElementById("chat-widget-input").focus();
       } else {
-        // Hide the chatbox with slide-out animation
         chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
         setTimeout(() => {
           chatBox.style.display = 'none';
-        }, 400);  // Match the animation duration
+        }, 400);
       }
     }
 
@@ -252,4 +251,34 @@ document.addEventListener('mouseup', event => {
   clicked = false; 
   move = false;
 });
+
+// Function to move chatbox based on button's position
+function moveChatboxToNewPosition() {
+  const buttonRect = widgetButton.getBoundingClientRect();
+  const buttonHeight = widgetButton.offsetHeight;
+  const chatboxWidth = chatBox.offsetWidth;
+  const chatboxHeight = chatBox.offsetHeight;
+
+  let chatboxLeft, chatboxTop;
+
+  // Check if the button is on the right or left side
+  if (buttonRect.left + buttonRect.width / 2 > window.innerWidth / 2) {
+    chatboxLeft = buttonRect.left - chatboxWidth - 15; // Position to the left of the button
+  } else {
+    chatboxLeft = buttonRect.left + buttonRect.width + 15; // Position to the right of the button
+  }
+
+  // Default top position: place chatbox next to the button
+  chatboxTop = buttonRect.top + buttonHeight / 2 - chatboxHeight / 2;
+
+  // Ensure the chatbox stays within the vertical bounds
+  if (chatboxTop + chatboxHeight > window.innerHeight) {
+    chatboxTop = buttonRect.top - chatboxHeight / 2 - 10; // Position above if overflow
+  }
+
+  // Apply the calculated position to the chatbox with smooth transition
+  chatBox.style.left = `${Math.min(Math.max(chatboxLeft, 0), window.innerWidth - chatboxWidth)}px`;
+  chatBox.style.top = `${Math.min(Math.max(chatboxTop, 30), window.innerHeight - chatboxHeight - 30)}px`;
+  chatBox.style.transition = 'all 0.3s ease-out'; // Smooth transition while moving
+}
 
