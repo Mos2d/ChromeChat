@@ -45,66 +45,7 @@ window.addEventListener('load', () => {
 
 // Toggle chat box on button click (only if it's not dragging)
 widgetButton.addEventListener('click', (event) => {
-  if (isDragging) return; // Don't open/close the chatbox if dragging
-  if (chatBox.style.display === 'none') {
-    // Get the position of the button
-    const buttonRect = widgetButton.getBoundingClientRect();
-    const buttonHeight = widgetButton.offsetHeight;
-    chatBox.style.opacity = '0';
-    chatBox.style.display = 'block';
-    const chatboxWidth = chatBox.offsetWidth;
-    const chatboxHeight = chatBox.offsetHeight;
-    chatBox.style.opacity = '1';
-    chatBox.style.display = 'none';
-
-    let chatboxLeft, chatboxTop;
-
-    // Check if the button is on the right or left side
-    if (buttonRect.left + buttonRect.width / 2 > window.innerWidth / 2) {
-      // Button is on the right side, fix chatbox on the left
-      chatboxLeft = buttonRect.left - chatboxWidth - 10; // Position to the left of the button
-    } else {
-      // Button is on the left side, fix chatbox on the right
-      chatboxLeft = buttonRect.left + buttonRect.width + 10; // Position to the right of the button
-    }
-
-    // Default top position: place chatbox below the button
-    chatboxTop = buttonRect.top + buttonHeight + 10;
-
-    // Ensure the chatbox stays within the vertical bounds
-    if (chatboxTop + chatBox.offsetHeight > window.innerHeight) {
-      // If it overflows, place it above the button
-      chatboxTop = buttonRect.top - chatboxHeight - 10;
-    }
-
-    // Apply the calculated position to the chatbox
-    chatBox.style.left = `${Math.min(Math.max(chatboxLeft, 0), window.innerWidth - chatboxWidth)}px`;
-    chatBox.style.top = `${Math.min(Math.max(chatboxTop, 30), window.innerHeight - chatboxHeight - 30)}px`;
-
-    // Show the chatbox with animation
-    chatBox.style.display = 'block';
-    chatBox.style.animation = 'slideFromButton 0.3s ease-out forwards';
-    document.getElementById("chat-widget-input").focus();
-  } else {
-    // Hide the chatbox with slide-out animation
-    chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
-    setTimeout(() => {
-      chatBox.style.display = 'none';
-    }, 400);  // Match the animation duration
-  }
-});
-
-// Close chatbox when clicking outside of it
-document.addEventListener('click', (event) => {
-  const isClickInsideChatBox = chatBox.contains(event.target);
-  const isClickOnButton = widgetButton.contains(event.target);
-
-  if (!isClickInsideChatBox && !isClickOnButton && chatBox.style.display === 'block') {
-    chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
-    setTimeout(() => {
-      chatBox.style.display = 'none';
-    }, 400);
-  }
+  
 });
 
 // Handle send button
@@ -165,54 +106,68 @@ document.getElementById('chat-widget-input').addEventListener('keydown', (event)
   }
 });
 
-let isDragging = false;
+let clicked = false;
+let move = false;
 let offsetX = 0;
 let offsetY = 0;
 let initialX = 0;
 let initialY = 0;
+const moveThreshold = 10;
 
 // Default padding for button from edges
 const padding = 20;
 
-// When the mouse is pressed on the button, start the dragging process
-widgetButton.addEventListener('pointerdown', (event) => {
-  isDragging = true;
-  initialX = event.clientX;
-  initialY = event.clientY;
+document.addEventListener('mousedown', event => {
+  const isClickOnButton = widgetButton.contains(event.target);
+    
+  // Close chatbox when clicking outside of chatbox or chat button
+  if (isClickOnButton) {
+    clicked = true; 
 
-  // Get the current position of the button relative to the page
-  const rect = widgetButton.getBoundingClientRect();
-  offsetX = initialX - rect.left;
-  offsetY = initialY - rect.top;
+    initialX = event.clientX;
+    initialY = event.clientY;
 
-  // Remove transition during drag (no delay while dragging)
-  widgetButton.style.transition = 'none';
+    // Get the current position of the button relative to the page
+    const rect = widgetButton.getBoundingClientRect();
+    offsetX = initialX - rect.left;
+    offsetY = initialY - rect.top;
 
-  event.preventDefault(); // Prevent text selection or other default behaviors during drag
-});
+    // Remove transition during drag (no delay while dragging)
+    widgetButton.style.transition = 'none';
 
-// When the mouse is moved, move the button around
-document.addEventListener('pointermove', (event) => {
-  if (isDragging) {
-    let x = event.clientX - offsetX;
-    let y = event.clientY - offsetY;
-
-    // Prevent button from going outside the screen borders
-    const maxX = window.innerWidth - widgetButton.offsetWidth - padding;
-    const maxY = window.innerHeight - widgetButton.offsetHeight - padding;
-
-    x = Math.min(Math.max(x, padding), maxX);  // Limit x to stay within screen bounds
-    y = Math.min(Math.max(y, padding), maxY);  // Limit y to stay within screen bounds
-
-    // Update the button's position immediately while dragging
-    widgetButton.style.left = `${x}px`;
-    widgetButton.style.top = `${y}px`;
+    event.preventDefault(); // Prevent text selection or other default behaviors during drag
   }
 });
 
-// When the mouse is released, snap the button to the nearest edge with smooth transition
-document.addEventListener('pointerup', () => {
-  if (isDragging) {
+document.addEventListener('mousemove', event => { 
+  if (clicked) {
+    const deltaX = Math.abs(event.clientX - initialX);
+    const deltaY = Math.abs(event.clientY - initialY);
+    
+    // Check if the mouse moved more than the threshold
+    if (deltaX > moveThreshold || deltaY > moveThreshold) {
+      move = true; // Only set move to true if the movement exceeds the threshold
+
+      let x = event.clientX - offsetX;
+      let y = event.clientY - offsetY;
+
+      // Prevent button from going outside the screen borders
+      const maxX = window.innerWidth - widgetButton.offsetWidth - padding;
+      const maxY = window.innerHeight - widgetButton.offsetHeight - padding;
+
+      x = Math.min(Math.max(x, padding), maxX);  // Limit x to stay within screen bounds
+      y = Math.min(Math.max(y, padding), maxY);  // Limit y to stay within screen bounds
+
+      // Update the button's position immediately while dragging
+      widgetButton.style.left = `${x}px`;
+      widgetButton.style.top = `${y}px`;
+    }
+  }
+});
+
+document.addEventListener('mouseup', event => { 
+  // If user was dragging the button
+  if (clicked && move) {
     const buttonRect = widgetButton.getBoundingClientRect();
     const screenWidth = window.innerWidth;
 
@@ -229,12 +184,72 @@ document.addEventListener('pointerup', () => {
     // Set the final position for the button
     widgetButton.style.left = `${closestX}px`;
     widgetButton.style.top = `${Math.min(Math.max(currentY, padding), window.innerHeight - widgetButton.offsetHeight - padding)}px`;
+  } else {
+    const isClickInsideChatBox = chatBox.contains(event.target);
+    const isClickOnButton = widgetButton.contains(event.target);
+    
+    // Close chatbox when clicking outside of chatbox or chat button
+    if (!isClickInsideChatBox && !isClickOnButton && chatBox.style.display === 'block') {
+      chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
+      setTimeout(() => {
+        chatBox.style.display = 'none';
+      }, 400);
+    }
+    
+    // When clicking on the chat button (not dragging)
+    if(isClickOnButton) {
+      if (chatBox.style.display === 'none') {
+        // Get the position of the button
+        const buttonRect = widgetButton.getBoundingClientRect();
+        const buttonHeight = widgetButton.offsetHeight;
+        chatBox.style.opacity = '0';
+        chatBox.style.display = 'block';
+        const chatboxWidth = chatBox.offsetWidth;
+        const chatboxHeight = chatBox.offsetHeight;
+        chatBox.style.opacity = '1';
+        chatBox.style.display = 'none';
 
-    isDragging = false; // Stop dragging
+        let chatboxLeft, chatboxTop;
+
+        // Check if the button is on the right or left side
+        if (buttonRect.left + buttonRect.width / 2 > window.innerWidth / 2) {
+          // Button is on the right side, fix chatbox on the left
+          chatboxLeft = buttonRect.left - chatboxWidth - 10; // Position to the left of the button
+        } else {
+          // Button is on the left side, fix chatbox on the right
+          chatboxLeft = buttonRect.left + buttonRect.width + 10; // Position to the right of the button
+        }
+
+        // Default top position: place chatbox below the button
+        chatboxTop = buttonRect.top + buttonHeight + 10;
+
+        // Ensure the chatbox stays within the vertical bounds
+        if (chatboxTop + chatBox.offsetHeight > window.innerHeight) {
+          // If it overflows, place it above the button
+          chatboxTop = buttonRect.top - chatboxHeight - 10;
+        }
+
+        // Apply the calculated position to the chatbox
+        chatBox.style.left = `${Math.min(Math.max(chatboxLeft, 0), window.innerWidth - chatboxWidth)}px`;
+        chatBox.style.top = `${Math.min(Math.max(chatboxTop, 30), window.innerHeight - chatboxHeight - 30)}px`;
+
+        // Show the chatbox with animation
+        chatBox.style.display = 'block';
+        chatBox.style.animation = 'slideFromButton 0.3s ease-out forwards';
+        document.getElementById("chat-widget-input").focus();
+      } else {
+        // Hide the chatbox with slide-out animation
+        chatBox.style.animation = 'slideToButton 0.3s ease-out forwards';
+        setTimeout(() => {
+          chatBox.style.display = 'none';
+        }, 400);  // Match the animation duration
+      }
+    }
+
   }
+
+  // Reset this back to false for next time
+  clicked = false; 
+  move = false;
 });
 
-// Optional: Allow pointer to leave the screen and stop dragging
-document.addEventListener('pointercancel', () => {
-  isDragging = false;
-});
