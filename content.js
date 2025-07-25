@@ -220,13 +220,13 @@ document.addEventListener('mouseup', event => {
           chatboxLeft = buttonRect.left + buttonRect.width + 10; // Position to the right of the button
         }
 
-        // Default top position: place chatbox below the button
-        chatboxTop = buttonRect.top + buttonHeight + 10;
+        // Default top position: place chatbox next to the button
+        chatboxTop = buttonRect.top + buttonHeight/2 - chatboxHeight/2;
 
         // Ensure the chatbox stays within the vertical bounds
-        if (chatboxTop + chatBox.offsetHeight > window.innerHeight) {
+        if (chatboxTop + chatboxHeight > window.innerHeight) {
           // If it overflows, place it above the button
-          chatboxTop = buttonRect.top - chatboxHeight - 10;
+          chatboxTop = buttonRect.top - chatboxHeight/2 - 10;
         }
 
         // Apply the calculated position to the chatbox
