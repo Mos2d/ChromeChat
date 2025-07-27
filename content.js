@@ -31,6 +31,7 @@ chatBox.innerHTML = `
   <div>
     <div>AI Chatbot</div>
     <input type="text" id="chat-widget-input" placeholder="Type a command"/>
+    <button id="chat-widget-mic" title="Speak">🎤</button>
     <button id="chat-widget-send">Send</button>
     <div id="chat-widget-response"></div>
   </div>
@@ -282,3 +283,31 @@ function moveChatboxToNewPosition() {
   chatBox.style.transition = 'all 0.3s ease-out'; // Smooth transition while moving
 }
 
+// Voice Recognition
+const micButton = document.getElementById('chat-widget-mic');
+let recognition;
+
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.trim();
+    document.getElementById('chat-widget-input').value = transcript;
+    document.getElementById('chat-widget-send').click();
+  };
+
+  recognition.onerror = (event) => {
+    console.error('Speech recognition error:', event.error);
+  };
+
+  micButton.addEventListener('click', () => {
+    recognition.start();
+  });
+} else {
+  micButton.disabled = true;
+  micButton.title = "Speech Recognition not supported";
+}
